@@ -1,0 +1,49 @@
+1. 添加了一些异步多线程的ASDisplayNode (类似载体UIView)
+	> 这些ASDisplayNode中包含了加载显示UI的, 属性view:(UIView *)
+
+	> 把一个View ==》包含在一个, 异步实例化和加载的Node的View属性中
+		> 在UIView的基础上添加 异步、多线程等功能
+
+	> ASDisplayNode的生命周期函数
+		> calculateSizeThatFits:
+		> didLoad
+		> layout
+
+2. AsyncDisplayKit中得UI层次:
+
+	> 主线程View:
+		> ASDisplayNode.view(GCD配合实例化、添加)
+			> ASDisplayNode.view(Node可以直接添加子Node)
+
+
+3. Node显示在 主线程View 步骤:
+
+	( 
+		注意:
+
+			主线程View: 1)UIWindow 2)控制器.view 3)控制器.layer 
+	)
+
+	dispatch_async(队列, ^{
+	  
+		  ASTextNode *node = [[ASTextNode alloc] init];
+		  node.attributedString = [[NSAttributedString alloc] 				initWithString:@"hello!"
+	       attributes:nil];
+		  [node measure:CGSizeMake(screenWidth, FLT_MAX)];
+		  node.frame = (CGRect){ CGPointZero, node.calculatedSize 
+	  };
+
+	  // 控制器.view 不是 Node, 控制器.layer 也不是 Node
+	  dispatch_sync(dispatch_get_main_queue(), ^{
+	    [self.view addSubview:node.view];
+	  });
+
+	});
+
+
+
+
+
+
+
+
