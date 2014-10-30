@@ -5,9 +5,9 @@
 		> 在UIView的基础上添加 异步、多线程等功能
 
 	> ASDisplayNode的生命周期函数
-		> calculateSizeThatFits:
-		> didLoad
-		> layout
+		> calculateSizeThatFits:  --> 计算当前Node自己的总高度和总宽度(累加内部所有subnode显示内容的高度、宽度)
+		> layout				  --> 重新计算并设置，当前Node内部所有的sunNode的frame
+		> didLoad			      --> 当前Node加载完毕
 
 2. AsyncDisplayKit中得UI层次:
 

@@ -115,16 +115,20 @@ static const CGFloat kInnerPadding = 10.0f;
     NSInteger width = roundl(_kittenSize.width);
     NSInteger height = roundl(_kittenSize.height);
     
+#pragma mark - 异步请求服务器URL图片, 回调Block代码块中获取UIImage对象
     NSURL *kittenURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://placekitten.com/%zd/%zd", width, height]];
     [NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:kittenURL]
                                        queue:queue
                            completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                               
+                               //回调Block中获取responseData
                                if (connectionError || !data || !data.length)
                                    return;
                                _imageNode.image = [UIImage imageWithData:data];
                            }];
 }
 
+#pragma mark - 计算当前Cell的总高度和总宽度 (累加计算出得所有subNode的内容需要的宽度和高度)
 - (CGSize)calculateSizeThatFits:(CGSize)constrainedSize
 {
     CGSize imageSize = CGSizeMake(kImageSize, kImageSize);
@@ -136,6 +140,7 @@ static const CGFloat kInnerPadding = 10.0f;
     return CGSizeMake(constrainedSize.width, requiredHeight + 2 * kOuterPadding);
 }
 
+#pragma mark - 从新计算并设置 当前Cell内部所有subNode的frame
 - (void)layout
 {
     CGFloat pixelHeight = 1.0f / [[UIScreen mainScreen] scale];

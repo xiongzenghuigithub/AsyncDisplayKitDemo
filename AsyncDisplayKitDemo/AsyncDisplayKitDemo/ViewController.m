@@ -33,6 +33,7 @@
         [self.view addSubview:_tableView];
 }
 
+#pragma mark - 直接计算数据源内容需要显示的宽度和高度
 - (void)initDataSource {
     
     NSMutableArray *kittenDataSource = [NSMutableArray arrayWithCapacity:20];
