@@ -24,16 +24,16 @@
 			主线程View: 1)UIWindow 2)控制器.view 3)控制器.layer 
 	)
 
-	dispatch_async(队列, ^{
+	dispatch_async(非主线程队列, ^{
 	  
-		  ASTextNode *node = [[ASTextNode alloc] init];
-		  node.attributedString = [[NSAttributedString alloc] 				initWithString:@"hello!"
-	       attributes:nil];
-		  [node measure:CGSizeMake(screenWidth, FLT_MAX)];
-		  node.frame = (CGRect){ CGPointZero, node.calculatedSize 
-	  };
+	  //1. 用户自定义队列创建 aysnc node	
+	  ASTextNode *node = [[ASTextNode alloc] init];
+	  node.attributedString = [[NSAttributedString alloc] initWithString:@"hello!"
+       attributes:nil];
+	  [node measure:CGSizeMake(screenWidth, FLT_MAX)];
+	  node.frame = (CGRect){ CGPointZero, node.calculatedSize 
 
-	  // 控制器.view 不是 Node, 控制器.layer 也不是 Node
+	  //2. 主线程队列将 async node 里面的UIView对象 添加给主线程View (控制器.view 不是 Node, 控制器.layer 也不是 Node)
 	  dispatch_sync(dispatch_get_main_queue(), ^{
 	    [self.view addSubview:node.view];
 	  });
